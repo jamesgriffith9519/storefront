@@ -1,0 +1,170 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Manufacturer>
+
+@{
+    ViewBag.Title = "Lawn Equipment Brands";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p class="row">
+    <!--Replacing this with a button to toggle a create form with AJAX Create! --> @*@Html.ActionLink("Create New", "Create")*@
+    <button id="toggleManufacturerCreate" class="btn btn-primary text-right pull-left">Add New</button>
+
+</p>
+
+<div id="ManufacturerCreate">
+    @Html.Partial("ManufacturerCreate", new StoreFront.DATA.EF.Manufacturer())
+
+</div>
+
+
+<table class="table" id="ManufacturersTable">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Manu_Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Origin_Country)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id="Manufacturer-@item.ManufacturerID">
+            <td>
+                @Html.DisplayFor(modelItem => item.Manu_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Origin_Country)
+            </td>
+            <td>
+
+                <!--Replacing this edit link with AJAX links-->
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.ManufacturerID })*@
+                <a href="" class="EditLink" id="@item.ManufacturerID">Edit</a>
+
+
+
+
+                @*@Html.ActionLink("Details", "Details", new { id = item.ManufacturerID })*@
+
+                <!--Nolonger need default details button: REPLACED WITH AJAX VERSION BELOW-->
+
+                <a href="#" class="DetailsLink" id="@item.ManufacturerID">Details</a>
+
+
+                <!--Deleting this actionLink to place with AjaxDelete Button-->
+                @*@Html.ActionLink("Delete", "Delete", new { id=item.ManufacturerID })*@
+                <!---------------------------------------------------------------------->
+                @Ajax.ActionLink("delete", "AjaxDelete", "Manufacturers", new {id = item.ManufacturerID }, new AjaxOptions {
+                  HttpMethod = "POST", Confirm = "Are you sure you want to delete " + item.Manu_Name + " " + "from Manufacturers?", OnSuccess = "deleteConfirmed"//<--- is function to run if request is successful.
+               })
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+<div id="ManufacturerDetails"></div>
+<div id="ManufacturerEdit"></div>
+
+@section scripts {
+
+    <script>
+        //*******AJAX Delete Confirmation *********//
+        function deleteConfirmed(response, status, data) {
+            //use JS to remove the row from th table on screen.
+
+            var rowId = "#Manufacturer-" + response.id;
+            $("#ManufacturersTable").find(rowId).remove();
+
+            //use JS to display a status message for confirmation.
+            $("#MessageContent").html("<div class='alert alert-success'>" + response.message + "</div>");
+        }
+
+        //-------------------------------------------------------------------------//
+
+          //******* Show Create Form *********//
+
+        $("#ManufacturerCreate").hide();//this starts the form area as hidden
+
+        $("#toggleManufacturerCreate").click(function () {
+            $("#ManufacturerCreate").toggle();//flips visibility off/on
+        });//end of buttonclick event handler.
+
+        $("#ManufacturerCreateForm").submit(function (e) {
+            e.preventDefault();//donm't submit the form normally, let JavaScript handle it
+
+            var formData = $(this).serializeArray();
+
+            $("#MessageContent").html("<div class='alert alert-info'>Please Wait...</div>")
+            $.ajax({
+                url: "@Url.Action("AjaxCreate", "Manufacturers")",
+                type: "POST",
+                data: formData,
+                dataType: "Json",
+                success: function (data) {
+                    $("#MessageContent").html("<div class='alert alert-success'>Author Created Successfully!</div>");
+                    $("#ManufacturerCreateForm")[0].reset();//to reset the form. weird syntax but it works.
+                    $(function () {
+                        var row = '<tr><td>' + data.Manu_Name + '</td><td>' + data.Origin_Country + "</td><td>Refresh to view options</td></tr>"
+
+                        $("#ManufacturersTable").append(row);
+
+                    });//end of self invoking anonymous function block that adds row to the table.
+                },
+                error: function (e) {
+                    $("#MessageContent").html("<div class='alert alert-danger'>There was an error. Please try again or contact the System Administrator</div>");
+                }//end of error property funtionality.
+            });//end ajax function call, which includes a TON of property value assignments
+        });//end form submit event handler
+
+//-------------------------------------------------------------------------------------------------//
+
+        $(".DetailsLink").click(function (e) {
+            e.preventDefault();//this stops the normal behavior for this end. --prevents the browser window from reloading.
+
+            //target the popup div (placeholder) pass it the data that it will need, apply my JQuery UI dialog plugin to make it a pop-up box with various settings.
+            //open our partial view in the pop-up to show the publishers info.
+            $("#ManufacturerDetails").data('pId', $(this).attr('id')).dialog({
+                modal: true,
+                width: 400,
+                height: 200,
+                open: function () {
+                    var data = $(this).data('pId');
+                    $(this).load("/Manufacturers/ManufacturerDetails/" + data);
+                },
+                resizable: false,
+                title: "Manufacturer Details"
+
+            });//end of dialog pluginification
+
+        });//end details button click wireup
+
+        ///--------------------------------------------------------------------//
+
+
+        $('.EditLink').click(function (e) {
+            e.preventDefault();
+            $("#ManufacturerEdit").data('pId', $(this).attr('id')).dialog({
+                modal: true,
+                width: 600,
+                height: 438,
+                open: function () {
+                    var data = $(this).data('pId');
+                    $(this).load("/Manufacturers/ManufacturerEdit/" + data);
+                },
+                resizable: false,
+                title: "Edit Manufacturer"
+                
+            });
+        });
+
+        </script>
+
+
+
+
+    }

@@ -1,0 +1,95 @@
+﻿@model StoreFront.DATA.EF.Manufacturer
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { id = "ManufacturerEditForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @*<h4>Manufacturer</h4>
+        <hr />*@
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.ManufacturerID)
+
+        <div class="form-group">
+            
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Manu_Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Manu_Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Manu_Name, "", new { @class = "text-danger" })
+            </div>
+
+            
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Origin_Country, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Origin_Country, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Origin_Country, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Update Manufacturer" class="btn btn-default" id="saveUpdate" />
+            </div>
+        </div>
+    </div>
+}
+
+    <script>
+    @*//***** AJAX UPDATE ***** //
+    //COPY AJAX CREATE and update the form as noted below targeted (#PublisherEditForm) and Url.Action(AjaxEdit)
+        $("#ManufacturerEditForm").submit(function (e) { //TEACH-COMMENT: changed form ID
+        e.preventDefault();
+        var formData = $(this).serializeArray();
+        $('#MessageContent').html("<div class='alert alert-info'>Please Wait...</div>");
+
+        $.ajax({
+            url: "@Url.Action("AjaxEdit","Manufacturers")", //changed action
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                //changed msg
+                $('#MessageContent').html("<div class='alert alert-success'>Your Record was Successfully Updated!</div>");
+                $('#ManufacturerEditForm')[0].reset();//changed form ID
+
+                $(function () {
+                    var row = '<tr><td>' + data.Manu_Name +
+                        '</td><td>' + Origin_Country +     
+                   '</td><td>Refresh to view options</td></tr>';
+                    $('#Manufacturer-' + data.ManufacturerID).replaceWith(row);//rewrote entire line for replace not append
+                });
+                $("#ManufacturerEdit").dialog('close');//new - close pop-up after submit
+            },
+            error: function (e) {
+                $('#MessageContent').html("<div class='alert alert-warning'>There was an error. Please try again or contact the site administrator.</div>");
+            }
+        });
+    });*@
+
+
+         $("#ManufacturerEditForm").submit(function (e) {
+            e.preventDefault();//donm't submit the form normally, let JavaScript handle it
+
+            var formData = $(this).serializeArray();
+
+            $("#MessageContent").html("<div class='alert alert-info'>Please Wait...</div>")
+            $.ajax({
+                url: "@Url.Action("AjaxEdit", "Manufacturers")",
+                type: "POST",
+                data: formData,
+                dataType: "Json",
+                success: function (data) {
+                    $("#MessageContent").html("<div class='alert alert-success'>Manufacturer Edited Successfully!</div>");
+                    $("#ManufacturerEditForm")[0].reset();//to reset the form. weird syntax but it works.
+                    $(function () {
+                        var row = '<tr><td>' + data.Manu_Name + '</td><td>' + data.Origin_Country + "</td><td>Refresh to view options</td></tr>";
+
+                        $('#Manufacturer-' + data.ManufacturerID).replaceWith(row);
+
+                    });//end of self invoking anonymous function block that adds row to the table.
+                    $('ManufacturerEdit').dialog('close');
+                },
+                error: function (e) {
+                    $("#MessageContent").html("<div class='alert alert-danger'>There was an error. Please try again or contact the System Administrator</div>");
+                }//end of error property funtionality.
+            });//end ajax function call, which includes a TON of property value assignments
+        });//end form submit event handler
+    </script>

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Storefront Product Demo">
+
+    <title>Storefront - James Griffith</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="~/Content/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/Content/css/style.css">
+    <link rel="stylesheet" type="~/Content/text/css" href="css/animate.min.css">
+
+    <!-- Custom Fonts -->
+    <link href="~/Content/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="js/html5shiv.js"></script>
+        <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- Load an icon library to show a hamburger menu (bars) on small screens -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!--Ajax stylesheets below.-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/south-street/jquery-ui.css">
+
+    <div class="topnav" id="myTopnav">
+        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+        {
+
+            <a href="@Url.Action("index","RolesAdmin")">Roles Admin</a>
+            <a href="@Url.Action("index","usersAdmin")">Users Admin</a>
+        }
+
+        <a href="@Url.Action("Contact","home")">Contact</a>
+        @*<a href="@Url.Action("about","home")">About</a>*@
+        <a href="@Url.Action("index","products")">Products</a>
+        <a href="@Url.Action("index","home")">Home</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        @* class="active" *@
+        @Html.Partial("_LoginPartial")
+    </div>
+
+    <div class="container" id="JSMessageContantHome">
+        <div class="row" id="Testingthisthing">
+
+        </div>
+    </div>
+    <!-- Navigation -->
+    <!-- /////////////////////////////////////////Header -->
+    <header class="text-center" name="home">
+        <div class="intro-text">
+            <h1 class="wow fadeInDown">Welcome to <strong><span class="color">The Mower Depot</span></strong></h1>
+            <div id="sloganID">
+                <p class="wow fadeInDown">Mowing down the competition</p>
+            </div>
+            <a href="@Url.Action("index", "products")" class="btn btn-default btn-lg page-scroll wow fadeInUp testhideBtn" data-wow-delay="200ms">Our Products</a>
+            @*@{
+                    string CurrentURL = Request.Url.AbsoluteUri;
+                    if (CurrentURL.Contains("/Home"))
+                    {
+                        <a href="@Url.Action("index", "products")" class="btn btn-default btn-lg page-scroll wow fadeInUp testhideBtn" data-wow-delay="200ms">Our Products</a>
+                    }
+                }*@
+        </div>
+    </header>
+    <!-- Header -->
+    <!-- /////////////////////////////////////////Content -->
+
+
+
+    <div class="container">
+        <div id="MessageDisplay" class="row">
+            <div id="MessageContent" class="col-md-10 col-md-offset-1">
+
+            </div>
+
+
+        </div><!--end MessageDisplay-->
+    </div>
+
+
+
+
+    <div id="page-content" class="index-page">
+        <!-- ////////////Content Box 01 -->
+        <section id="" class="box-content box-style text-center">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </section>
+
+    </div>
+
+    <!-- /////////////////////////////////////////Footer -->
+    <footer>
+        <div id="footer">
+            <div class="container">
+                <p>Copyright @@ James Griffith @DateTime.Today.Year</p>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer -->
+    <!-- Portfolio Modals -->
+    <!-- Use the modals below to showcase details about your portfolio projects! -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+    </script>
+
+    @*<script type="text/javascript" src="~/Content/jquery-2.1.1.js"></script>*@
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    @*<script type="text/javascript" src="~/Content/jquery-2.1.1.js"></script>*@
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
+
+
+    @*<script src="~/Content/js/jquery.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/SmoothScroll.js"></script>
+    <script type="text/javascript" src="~/Content/js/wow.min.js"></script>
+    <script type="text/javascript" src="~/Content/js/jquery.isotope.js"></script>
+    <script type="text/javascript" src="~/Content/js/main.js"></script>*@
+
+    <script src="~/Content/testCSS/jquery.min.js"></script>
+    <script src="~/Content/testCSS/bootstrap.min.js"></script>
+    <script src="~/Content/testCSS/google-map.js"></script>
+    <script src="~/Content/testCSS/main.js"></script>
+
+
+
+
+
+    <!--Added jQuery AJAX CDN-->
+    <script src="https://cdn.jsdelivr.net/jquery.ajax.unobtrusive/3.2.4/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

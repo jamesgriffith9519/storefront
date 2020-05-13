@@ -1,0 +1,121 @@
+﻿@model IEnumerable<StoreFront.DATA.EF.Product>
+
+@{
+    ViewBag.Title = "Lawn Equipment";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+<hr id="productsTopHr" />
+<div class="container-fluid">
+    <div class="row" id="detailsHeaders2">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 box">
+                <div class="inner">
+                    <a href="@Url.Action("details", new { id = item.ProductID })">
+                        <img src="~/Content/images/database lawn mower images/@item.Image_Name" alt="Allegiant" title="@item.Description" id="productImagesMain" />
+                    </a>
+                    <figcaption>
+                        <h3>@Html.DisplayNameFor(model => model.ProductName):&nbsp;</h3>
+                        <p>@Html.DisplayFor(modelItem => item.ProductName)</p>
+                        <br />
+                        <h3>@Html.DisplayNameFor(model => model.Manufacturer.Manu_Name):&nbsp;</h3>
+                        <p>@Html.DisplayFor(modelItem => item.Manufacturer.Manu_Name)</p>
+                        <br />
+                        <h3>@Html.DisplayNameFor(model => model.Category.Category_Name):&nbsp;</h3>
+                        <p>@Html.DisplayFor(modelItem => item.Category.Category_Name)</p>
+                        <br />
+                        <h3>@Html.DisplayNameFor(model => model.Price):&nbsp;</h3>
+                        <p>@Html.DisplayFor(modelItem => item.Price)</p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            //ADMIN ONLY!
+
+                            
+                            @*@Html.ActionLink("Edit", "Edit", new { id = item.ProductID })
+
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })*@
+
+
+
+                        }
+                    </figcaption>
+
+                </div>
+
+            </div>
+        }
+    </div>
+
+</div>
+<hr id="productsBottomHr" />
+
+@*<table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UnitsInStock)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category.Category_Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Manufacturer.Manu_Name)
+                </th>
+                <th></th>
+            </tr>
+
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    <a href="@Url.Action("details", new { id = item.ProductID })">
+                        <img src="~/Content/images/database lawn mower images/@item.Image_Name" alt="Allegiant" title="@item.Description" style="width:30%; border:black solid 1px;" />
+                    </a>
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Category_Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Manufacturer.Manu_Name)
+                </td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+    @Html.ActionLink("Details", "Details", new { id = item.ProductID })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ProductID })
+
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProductID })
+                    </td>
+                }
+
+            </tr>
+        }
+
+        </table>*@

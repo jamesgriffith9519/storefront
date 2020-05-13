@@ -1,0 +1,95 @@
+﻿@model StoreFront.DATA.EF.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<hr id="productsTopHr" />
+
+<div class="container-fluid">
+    <br /><br />
+    <div class="row" id="detailsHeaders">
+        <div class="col-md-4">
+            <h3>@Html.DisplayNameFor(model => model.ProductName):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.ProductName)</p>
+            <br />
+            <h3>@Html.DisplayNameFor(model => model.Manufacturer.Manu_Name):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.Manufacturer.Manu_Name)</p>
+            <br />
+            <h3>@Html.DisplayNameFor(model => model.Category.Category_Name):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.Category.Category_Name)</p>
+            <br />
+            <h3>@Html.DisplayNameFor(model => model.Price):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.Price)</p>
+            <br />
+            <h3>@Html.DisplayNameFor(model => model.UnitsInStock):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.UnitsInStock)</p>
+            <br />
+            <h3>@Html.DisplayNameFor(model => model.Description):&nbsp;</h3>
+            <p>@Html.DisplayFor(model => model.Description)</p>
+
+            @using (Html.BeginForm("AddToCart", "Products", new { productId = Model.ProductID }, FormMethod.Post, new { @class = "text-center" }))
+            {
+                @Html.HiddenFor(x => x.ProductID)//make sure to pass the pl value for this  book, user does not touch.
+                <span class="label" style="color:black;">Quantity:</span>
+                @Html.TextBox("Qty", 1, new { @class = "form-control", style = "max-width: 50px; display:inline;" })
+                <input type="submit" value="Add to Cart" class="btn btn-primary" style="background-color: #f1c40f;"/>
+            }
+        </div>
+        <div class="col-md-8" id="detailsImages">
+                @*@Html.DisplayNameFor(model => model.Image_Name)*@
+                <img src="~/Content/images/database lawn mower images/@Model.Image_Name" alt="@Model.ProductName" />
+        </div>
+    </div>
+</div>
+@*<ul>
+            <li>
+                <span>
+                    <strong>@Html.DisplayNameFor(model => model.ProductName):&nbsp;</strong>
+                    @Html.DisplayFor(model => model.ProductName)
+                </span>
+            </li>
+            <li>
+                <strong>@Html.DisplayNameFor(model => model.Manufacturer.Manu_Name):&nbsp;</strong>
+                @Html.DisplayFor(model => model.Manufacturer.Manu_Name)
+            </li>
+            <li>
+                <strong>@Html.DisplayNameFor(model => model.Price):&nbsp;</strong>
+                @Html.DisplayFor(model => model.Price)
+            </li>
+            <li>
+                <strong>
+                    @Html.DisplayNameFor(model => model.UnitsInStock):&nbsp;
+                </strong>
+                @Html.DisplayFor(model => model.UnitsInStock)
+            </li>
+            <li>
+                <strong>
+                    @Html.DisplayNameFor(model => model.Category.Category_Name):&nbsp;
+                    </strong>
+                @Html.DisplayFor(model => model.Category.Category_Name)
+            </li>
+
+            <li>
+               <strong> @Html.DisplayNameFor(model => model.Description):&nbsp;
+                </strong>
+                @Html.DisplayFor(model => model.Description)
+            </li>
+        </ul>
+    </div>
+
+    <br />
+<dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Image_Name)
+            </dt>
+
+            <dd>
+                <img src="~/Content/images/database lawn mower images/@Model.Image_Name" alt="@Model.ProductName" />
+            </dd
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ProductID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
+

@@ -1,0 +1,97 @@
+﻿@model Dictionary<int, StoreFront.UI.MVC.Models.ShoppingCartViewModel>
+
+@{
+    ViewBag.Title = "Shopping Cart";
+    //add some local variables to help with calculating line item totals & and the total of all totals.
+    decimal? cartTotal = 0;
+    int totalCountOfItems = 0;
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+
+
+@if (Session["confirm"] != null)
+{
+    <p class="alert alert-success">@Session["confirm"]</p>
+    Session["confirm"] = null;//clear out this session variable once displayed
+}
+
+
+@if (Model.Count == 0)
+{
+    <p class="alert alert-warning">@ViewBag.Message</p>
+}
+else
+{
+    //if you land here, we have atleast 1 cart item to show.
+    <table class="table">
+        <tr style="background-color:#F1C40F">
+            <th>
+                @*@Html.DisplayNameFor(model => model.Qty)*@
+                Product
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity
+            </th>
+            <th>
+                Total
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td style="text-align:left; width:15em;">
+                    <img src="~/Content/images/database lawn mower images/@item.Value.Product.Image_Name" alt="@item.Value.Product.ProductName" style="width:auto;" />
+                    @*@Html.DisplayFor(x => item.Value.Product.Manufacturer)*@ @*-- this line did not work.*@
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.Value.Product.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.Value.Product.Price)
+                </td>
+                <td>
+                    @*@Html.DisplayFor(x => item.Value.Qty)*@ @*add a form to let them choose a new quantity and update the cart item*@
+                    @using (Html.BeginForm("updateCart", "ShoppingCart", FormMethod.Post))
+                    {
+                        @Html.Hidden("productId", item.Value.Product.ProductID)
+                        @Html.TextBox("qty", item.Value.Qty, new { @class = "form-control", style = "max-width: 50px; display:inline;" })
+                        <input type="submit" value="Update Quantity" class="btn btn-info" style= "background-color: #f1c40f; color:black;"/>
+                    }
+
+                    @{
+                        totalCountOfItems += item.Value.Qty; //add quantity of each line-item in the cart to the running total
+                    }
+                </td>
+                <td>
+                    @{
+                        decimal? lineTotal = item.Value.Product.Price * item.Value.Qty;
+                        cartTotal += lineTotal;
+                    }
+                    @($"{lineTotal:c}")
+                </td>
+                <td id="removeFromCart">
+                    @Html.ActionLink("Remove From Cart", "RemoveFromCart", new { id = item.Value.Product.ProductID, style = "background-color: #f1c40f;" })
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
+
+    </table>
+    <p class="alert alert-success text-center" style="font-size: 1.25em;">You have @totalCountOfItems item(s) in your cart. Your total before taxes is @($"{cartTotal:c}")</p>
+}
+    <p>
+        @Html.ActionLink("Back to Shopping", "index", "products", null, new { @class = "btn btn-info", style = "background-color: #f1c40f; color: black;"})
+    </p>
